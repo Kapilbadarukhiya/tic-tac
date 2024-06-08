@@ -4,273 +4,1086 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+	<link href="https://fonts.googleapis.com/css?family=Ruthie" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=IM+Fell+DW+Pica+SC" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Tangerine" rel="stylesheet">
+
     <style>
-        td {
-	border: 2px solid #333;
-	height: 100px;
-	width: 100px;
-	text-align: center;
-	vertical-align: middle;
-	font-family: "Roboto", serif, sans-serif;
-	font-size: 70px;
-	cursor: pointer;
+      $template-base: #4D616C;
+
+*, *:before, *:after {
+  box-sizing: border-box;
 }
 
-table {
-	border-collapse: collapse;
-	position: absolute;
-	left: 50%;
-	margin-left: -155px;
-	top: 50px;
+* { 
+  margin: 0;
+  padding: 0; 
 }
 
-table tr:first-child td {
-	border-top: 0;
+.disable-select { user-select: none;}
+
+.hidden { display: none;}
+
+// .selected {
+//   opacity: 1;
+//   background: purple;
+// }
+
+.win-animation { 
+  animation: win-animation 1s linear .5s infinite;
 }
 
-table tr:last-child td {
-	border-bottom: 0;
+@keyframes win-animation {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
 }
 
-table tr td:first-child {
-	border-left: 0;
-}
-table tr td:last-child {
-	border-right: 0;
+.win-background{
+  background-color: #547865 !important;
 }
 
-.endgame {
-	display: none;
-	width: 200px;
-	top: 120px;
-	background-color: rgba(205, 133, 63, 0.8);
-	position: absolute;
-	left: 50%;
-	margin-left: -100px;
-	padding-top: 50px;
-	padding-bottom: 50px;
-	text-align: center;
-	border-radius: 5px;
-	color: white;
-	font-size: 2em;
+.draw-animation {
+  animation: draw-animation 1s linear 1s none;
 }
 
-.selectSym {
-	display: none;
-	width: 220px;
-	top: 110px;
-	background-color: rgba(205, 133, 63, 0.8);
-	position: absolute;
-	left: 50%;
-	margin-left: -110px;
-	padding-top: 10px;
-	padding-bottom: 50px;
-	text-align: center;
-	border-radius: 5px;
-	color: yellow;
-	font-size: 2em;
+@keyframes draw-animation {
+  from {
+
+    transform: scale(1, 1);
+  }
+  to {
+
+    transform: scale(0, 0);
+  }
 }
 
-.selectSym button {
-	font-family: "Comic Sans MS", cursive, sans-serif;
-	font-size: 50px;
-	width: 70px;
+html { height: 100%; width: 100%;}
+
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 10px ridge #374B56;
+  height: 100vh;
+  width: 100vw;
+  background: #232526;
+  overflow: hidden;
 }
 
-.selectSym button:first-of-type {
-	margin-right: 10px;
+header {
+  position: absolute;
+  background-color: #687982;
+  opacity: .7;
+  width: 100%;
+  top: 30px;
+  text-align: center;
+  font-family: 'Ruthie', cursive;
+    font-family: 'Tangerine', cursive;
+
+  font-size: 4em;
+  font-weight: 500;
+  color: #4E0006;
+  text-shadow: -1px -1px 9px #fff;
 }
-.selectSym button:last-of-type {
-	margin-left: 10px;
+
+#game-wrapper { // wraps the entire game
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 500px;
+  max-height: 500px;
+  width: 70%;
+  height: 85%;
+  // background: url('http://preview.ibb.co/gYiA27/black_2362266_1920.jpg') fixed;
+  background: url('http://preview.ibb.co/gYiA27/black_2362266_1920.jpg') no-repeat center center fixed;
+  
+  // border-radius: 150px 150px 0px 0px;
+  // background-color: blue;
+  // border: 1px solid grey;
+
+}
+
+#game-container {
+  position: absolute;
+  // background-color: pink;
+  
+  
+}
+
+#board-wrapper{ // inside the container, wraps the board
+  opacity: .8;
+  transition: opacity 1s;
+  background-color: $template-base;
+  
+  
+}
+
+#board-wrapper:hover{
+  opacity: .92;
+}
+
+.row{
+  
+}
+
+.col {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-tile {
+  width: 100px;
+  height: 100px;
+  background: grey; // experiment with different shades
+  border: 3px solid black;
+  margin: 4px;
+  transition: background-color .3s;
+  opacity: .6;
+  font-family: 'IM Fell DW Pica SC', serif;
+    
+
+  // font-size: 75px;
+  font-size: 4em;
+  color: pink;
+  font-weight: 900;
+ 
+}
+
+.game-tile:hover{
+  background-color: #575A75;
+  font-weight: 900;
+}
+
+.center-tile {
+  background-color: #4B261B;
+  transition: opacity .4s;
+  opacity: .8;
+}
+
+.center-tile:hover {
+  background-color: #4B261B;
+  opacity: .95;
+}
+
+#new-game-button {
+  position: absolute;
+  font-family: 'IM Fell DW Pica SC', serif;
+  font-family: 'Ruthie', cursive;
+    font-family: 'Tangerine', cursive;
+
+
+  font-size: 2.5em;
+  // color: #8D989E;
+  
+  border-radius: 10px 10px 10px 10px;
+  width: 200px;
+  padding: 0px;
+  // bottom: 0px;
+  // right: 175px;
+  
+  background-color: $template-base;
+  // border: 1px groove grey;
+  border: none;
+}
+
+.modal.show .modal-dialog {
+    transform: translate(0,-50%);
+    top: 50%;
+    margin: 0 auto;
+}
+
+.modal-header{
+  border-bottom: none !important;
+}
+
+.modal-content {
+  background-color: $template-base;
+  border-radius: 1px;
+}
+
+.modal-body {
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type='radio'] {
+  margin-right: 10px;
+}
+
+fieldset {
+  color: #071A25;
+  font-weight: 900;
+}
+
+fieldset legend {
+  color: #232526;
+}
+
+fieldset.form-border {
+    border: 1px groove $template-base !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    box-shadow:  0px 0px 0px 0px #000;
+    width: 75%;
+}
+
+legend.form-border {
+        font-size: 1.2em !important;
+        font-weight: bold !important;
+        text-align: center !important;
+        width:auto;
+        padding:0 10px;
+        border-bottom:none;
+}
+
+#first-move-span, #game-over-span {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  right: 15px;
+  color: $template-base;
+  font-family: 'Tangerine', cursive;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+@media screen and (max-height: 750px) {
+  header{display:none;}
+  // button{bottom: 50px;
+  }
+
+
+
+@media screen and (max-width: 270px) {
+ header{font-size:2.5em;} 
 }
 
     </style>
 </head>
 <body>
-    <body>
+  <header class = 'disable-select'>Tic-Tac-Toe</header>
+  <div id = "game-wrapper">
+    <div id = 'game-container' class = 'container-fluid'>
+      <div id = "board-wrapper">
 
-        <table>
-            <tr>
-                <td class="cell" id="0"></td>
-                <td class="cell" id="1"></td>
-                <td class="cell" id="2"></td>
-            </tr>
-            <tr>
-                <td class="cell" id="3"></td>
-                <td class="cell" id="4"></td>
-                <td class="cell" id="5"></td>
-            </tr>
-            <tr>
-                <td class="cell" id="6"></td>
-                <td class="cell" id="7"></td>
-                <td class="cell" id="8"></td>
-            </tr>
-        </table>
-        <div class="endgame">
-            <div class="text"></div>
+        <div id = 'row1' class = 'row no-gutters'>
+          <div id = 'tile0' class = "col game-tile disable-select"><h1></h1></div>
+          <div id = 'tile1' class = "col game-tile disable-select"><h1></h1></div>
+          <div id = 'tile2' class = "col game-tile disable-select"><h1></h1></div>
         </div>
-        <div class="selectSym">
-            <p>Select symbol:</p>
-            <button onClick="selectSym('X')">X</button>
-            <button onClick="selectSym('O')">O</button>
+        
+        <div id = 'row2' class = 'row no-gutters'>
+          <div id = 'tile3' class = "col game-tile disable-select"><h1></h1></div>
+          <div id = 'tile4' class = "col game-tile center-tile disable-select"><h1></h1></div>
+          <div id = 'tile5' class = "col game-tile disable-select"><h1></h1></div>
         </div>
-        <button onClick="startGame()">Replay</button>
+      
+        <div id = 'row3' class = 'row no-gutters'>
+          <div id = 'tile6' class = "col game-tile disable-select"><h1></h1></div>
+          <div id = 'tile7' class = "col game-tile disable-select"><h1></h1></div>
+          <div id = 'tile8' class = "col game-tile disable-select"><h1></h1></div>
+        </div>
+            
+
+      </div> <!-- close board-wrapper -->
+
+    </div> <!-- close game-container / container-fluid -->
+  </div> <!-- close game-wrapper -->
+  
+  <button id = 'new-game-button' data-toggle = "modal" data-target = "#Modal">New Game</button>
+ 
+<!-- The Modal -->
+<div class = "modal fade" id = "Modal">
+  <div class = "modal-dialog">
+    <div class = "modal-content">
+
+      <!-- Modal Header -->
+      <div class = "modal-header">
+      <h4 class = "modal-title"></h4>
+<!--         <button type = "button" class = "close" data-dismiss = "modal">&times;</button> -->
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form id = 'num-players-form' class="form-horizontal">
+          <fieldset class = 'form-border'>
+            <legend class = 'form-border'>How many players?</legend>
+            <input type="radio" class = 'num-players-input disable-select' name="num-players" value="1" />One player<br />
+            <input type="radio" class = 'num-players-input disable-select' name="num-players" value="2" />Two players<br />
+          </fieldset>
+        </form>
+        <form id = "piece-selection-form" class="form-horizontal">
+          <fieldset class = 'form-border'>
+            <legend class = 'form-border'><span></span>Select your piece</legend>
+            <input type="radio" class = 'piece-selection-input disable-select' name="piece-selection" value="X" />X<br />
+            <input type="radio" class = 'piece-selection-input disable-select' name="piece-selection" value="O" />O<br />
+          </fieldset>
+          
+        </form>
+        
+        <form id = "game-over-form" class = 'form-horizontal'>
+          <fieldset class = 'form-border'>
+            <legend class = 'form-border'></legend>
+          </fieldset>
+        </form>
+        
+        <span id = 'first-move-span'></span>
+        <span id = 'game-over-span'></span>
+      </div> <!-- close modal-body -->
+
+      <!-- Modal footer -->
+      <div class = "modal-footer">
+<!--         <button type = "button" class = "btn btn-danger" data-dismiss = "modal">Close</button> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+
+  
+  <footer class = 'disable-select'>By Dayna Blackwell</footer>  
+	<script>
+		let game = {
+  _numPlayers: 0,
+  _numTurns: 0,
+  _tilesFilled: 0,
+  _whoMovesFirst: null,
+  _whoseTurn: null,
+  _currentPlayer: null,
+  _gameOver: null,
+  _firstGame: true,
+  _gameNotStarted: true,
+  
+  board: {  
+    // currentBoardData will act as the data structure associated with the current game board
+    currentBoardData: [],
+    // solutionSet is an array of all possible winning combinations
+    solutionSet: [ [0,1,2], [3,4,5], [6,7,8],
+              [0,3,6], [1,4,7], [2,5,8],
+              [0,4,8], [6,4,2] ],
     
-        <script src="script.js"></script>
-        <script>
-            let origBoard;
-let huPlayer = "O";
-let aiPlayer = "X";
-const winCombos = [
-	[0, 1, 2],
-	[3, 4, 5],
-	[6, 7, 8],
-	[0, 4, 8],
-	[6, 4, 2],
-	[2, 5, 8],
-	[1, 4, 7],
-	[0, 3, 6]
-];
+    resetFlexBoxGrid: () => 
+    {   // for each game-tile, call the callback function with 'this' associated with each tile
+      $(".game-tile").each(function() 
+      { // sets the text of every game tile to the empty string
+        $(this).children().text('');
+      });
+    },
+    
+    resetBoardData: () => {
+      // the numbers will represent index positions of 'empty' tiles. A tile is 'empty' if it is not
+      // filled with "X" or "O"
+      game.board.currentBoardData = [0,1,2,3,4,5,6,7,8];
+    },
+    
+    resetBoard: () => 
+    { // combines function calls to resetBoardData() & resetFlexBoxGrid()
+      game.board.resetBoardData();
+      game.board.resetFlexBoxGrid();
+    },
+    
+    solutionAnimation: (solution) => 
+    { // solution is passed by checkWin function when a player has won the game.  
+    
+      // alert("From solution animation function: " + solution);
 
-const cells = document.querySelectorAll(".cell");
-startGame();
+      for(var i = 0; i<solution.length; i++)
+      { // for every index position in the solution array, toggle win animation and background
+        // on the appropriate game tiles
+        
+        $('#tile'+solution[i]).children().toggleClass('win-animation');
+        $('#tile'+solution[i]).toggleClass('win-background');
+      }
+      
+      $('.game-tile').each(function()
+      { // for every game tile..
+        if(!$(this).hasClass('win-background'))
+        { // if the tile is NOT part of the solution (indicated by the lack of win-background class..),
+          // clear it from visible board
+          $(this).children().text("");
+        }
+      });
+      
+  },
+    
+    drawAnimation: () => 
+    {
+      $('.game-tile').each(function()
+      {
+        $(this).children().toggleClass('draw-animation');
+      });
+  }},
+  
+  setupNewGame: () => 
+  {
+    game.isGameOver = false;
 
-function selectSym(sym) {
-	huPlayer = sym;
-	aiPlayer = sym === "O" ? "X" : "O";
-	origBoard = Array.from(Array(9).keys());
-	for (let i = 0; i < cells.length; i++) {
-		cells[i].addEventListener("click", turnClick, false);
-	}
-	if (aiPlayer === "X") {
-		turn(bestSpot(), aiPlayer);
-	}
-	document.querySelector(".selectSym").style.display = "none";
+    if(!game.isFirstGame) 
+    { // if this isn't the first game..
+      $("input:radio").each(function(i) 
+      {
+        this.checked = false;
+      });
+      
+      // $('#piece-selection-form').toggleClass('hidden');
+      // $('#game-over-form').toggleClass('hidden');
+      $('#first-move-span').toggleClass('hidden');
+      $("#game-over-span").text("");
+      // $("#game-over-span").toggleClass('hidden');
+      $('#num-players-form').show();
+      
+      $('.game-tile').each(function(){
+        if($(this).hasClass('win-background'))
+        {
+          // console.log(this);
+          $(this).toggleClass('win-background');
+          $(this).children().toggleClass('win-animation');
+        }
+        if ($(this).hasClass('draw-animation'))
+        {
+          $(this).children().toggleClass('draw-animation');
+        }
+      });
+    }
+    
+    game.board.resetBoard();
+    // reset game properties
+    game.numberOfPlayers = 0;
+    game.numberOfTurns = 0;
+    game.tilesFilled = 0;
+    game.whoMovesFirst = null;
+    game.whoseTurn = null;
+    game.currentPlayer = null;
+    game.isGameOver = false;
+    // create new player objects
+    playerOne = new Player(1);
+    playerTwo = new Player(2);
+    // $("#new-game-button").fadeToggle(2500);
+
+    // log new objects
+    // console.log(playerOne);
+    // console.log(playerTwo);
+    // console.log(game);
+  },
+  
+  checkWin: (board, currentPlayer) => 
+  { 
+    // console.log("Checking for winning conditions...");
+    // solution is passed in from the game.board.solutionSet array
+    // solutions:  [0,1,2] , [3,4,5] , etc ...
+    var matchFound = function(solution) 
+    { 
+     var matchCount = 0;
+
+     for (var i = 0; i<solution.length; i++) 
+     { // for every tile in the solution (3 in total. i=[0,2]) ...
+        // alert(i); // --> alerts every index, 0 - 2
+        // alert(solution); // --> alerts solutions from the solutionSet
+        // alert(game.board.currentBoardData[solution[i]]);  //--> alerts "X","O", or null
+        // alert(playerOne.piece); // --> alerts x or o
+        if(board.currentBoardData[solution[i]] === currentPlayer.piece)
+        { // if the value in the board data structure at i is the same as the current player's piece ....
+          // alert( 'currentBoard: ' + game.board.currentBoardData[solution[i]] + ', player piece: ' + currentPlayer.piece);
+          // increment match variable
+          matchCount++;
+          // alert("matchCount is: "+matchCount);
+        }
+        else 
+        { // otherwise, if the value in the data structure at i is NOT equal to the player's piece ...
+          // alert('solution invalid..');
+          // reset matchCount for this solution.  
+          matchCount = 0;
+          // continue;
+        }
+        if(matchCount == 3) 
+        {
+          console.log("Solution found: " + solution);
+          game.isGameOver = true;
+          game.isFirstGame = false;
+          board.solutionAnimation(solution);
+          return true;
+        }
+      }
+      // entire solution set has been considered.  no solution exists.  
+      // return false;
+    };
+    
+    // The some() method checks if any of the elements in an array pass a test (provided as a callback).
+    // The callback will be executed once for each element until the callback returns true.
+    if(board.solutionSet.some(matchFound)) 
+    { // match was found ..
+      // alert('match found');
+      return true;
+    }// no match was found..
+    else {return false;}
+  },
+  
+  checkDraw: () => {
+    // check to see if all of the tiles are filled AND the board has not been solved
+    if(game.tilesFilled == 9  && !(game.checkWin(game.board, game.currentPlayer))) 
+    { // if ALL tiles are filled AND no one has won the game, declare a draw..
+      // alert("Game Over.  You both lose..");
+      // game.board.drawAnimation();//////////////////////////!!!!!
+      $("#game-over-span").text("Game over.  You both lose..");
+     
+      $('.modal').fadeToggle(function() 
+      { // callback function
+        $('#Modal').modal('toggle');
+        $('#first-move-span').fadeToggle();
+        $('#new-game-button').fadeToggle();
+        game.isGameOver = true;
+        game.isFirstGame = false;
+
+      });
+      return true;
+    }
+    else {return false;}
+  },
+  
+  nextTurn: () => {
+    // increment the total number of turns (both players)
+    game.numberOfTurns++;
+    game.currentPlayer.numberOfTurns++;
+    // if it was player 1's turn before, it is player 2's turn now...
+    if (game.whoseTurn == 1) 
+    {
+      game.whoseTurn = 2;
+      game.currentPlayer = playerTwo;
+      
+      if(game.currentPlayer._AI) //1111111111111111111111111111111111111111111111111!!!
+      { // minimax returns 
+        // alert('AI should make move at this point...');
+        
+        game.makeMoveAI();
+        
+        var bestMove = game.minimax(game.board.currentBoardData, playerTwo);
+        game.board.currentBoardData[bestMove.index] = playerTwo.piece;
+        // setTimeout(function(){ $('#tile'+bestMove.index).children().text(playerTwo.piece); }, 1000);
+        $('#tile'+bestMove.index).children().text(playerTwo.piece);
+        game.tilesFilled++;
+        
+        if(game.checkDraw())
+        { // if there is a tie..
+          // setTimeout(game.board.resetFlexBoxGrid, 1200);
+          setTimeout(game.board.setupNewGame, 1200);
+          // console.log(playerOne);
+          // console.log(playerTwo);
+          // console.log(game);
+  
+          // game.setupNewGame();
+          return null;
+        }
+        
+        
+      if(game.checkWin(game.board, game.currentPlayer))
+      { // 
+        game.isFirstGame = false;
+        $("#game-over-span").text("Player " + game.currentPlayer.identity + " wins!");
+        $('.modal').fadeToggle(function() 
+        { // callback function
+          $('#Modal').modal('toggle');
+          // fade the span out
+          $('#first-move-span').fadeToggle();
+          // fade the button in
+          $("#new-game-button").fadeToggle();
+        });
+        return null;
+      }
+      else
+      {
+        game.nextTurn();  
+      }
+       // console.log(bestMove.index);
+      }
+    }
+    
+    
+    else 
+    { // otherwise, it WAS player is player 2's turn.  Is it now player 1's turn..
+      game.whoseTurn = 1;
+      game.currentPlayer = playerOne;
+    } 
+  },
+  
+  minimax: (board, player) => {
+    // board will be passed in as:  game.board.currentBoardData:  [ 'X', '', 'O' , ... , ['X] ]
+    // player will be passed in as: game.currentPlayer
+    
+    // get an array of tiles that are empty.  
+    // emptyIndices returns an array of INDEX POSITIONS representing empty game tiles
+    
+    // emptyTiles array on the first move will be [ 0,1,2,3,4,5,6,7,8 ]
+    var emptyTiles = game.emptyIndices(board);
+    
+    // check possible outcomes of the current board.  assign numerical value to outcomes.
+    
+    // if the current board is a winning board AND player is player 1
+    if (game.checkWinAI(board, playerOne))
+    { // return object with score property.  score has a value of -10, to indicate that player 1 won
+     return {score:-10};
+    } // if the current board is a winning board AND player is AI
+	  else if (game.checkWinAI(board, playerTwo))
+    { // return object with score property.  score has a value of 10, to indicate that AI won
+      return {score:10};
+	  } 
+    else if (emptyTiles.length === 0)
+    { // returns object with score property set to 0.  represents a tie outcome
+  	  return {score:0};
+    }
+    // movesArray will be an array of moveObj.  moveObj's will contain 2 properties:  index and score
+    // index is the index position of an empty tile in emptyTiles array
+    // score is the score assigned to that outcome based on its terminal state:  -10, 0, 10.
+    // -10:  player won.  10:  AI won.  0:  tie
+    
+    // -------------note; this point will never be reached unless there are no current winning boards
+    var movesArray = [];
+    
+    // iterate through empty tiles in emptyTiles array
+    for (var i = 0; i < emptyTiles.length; i++)
+    {
+      // create an object for each empty tile and store the index of that tile on the moveObj.  
+      // moveObj will eventually be stored in movesArray
+      var moveObj = {};
+      
+      // set the value of the index property to the index position of the current empty tile
+      // Again, for every empty tile on the board we are making a corresponding moveObj object
+  	  // emptyTiles[i] returns the ith index position.  that index goes into the board object
+      moveObj.index = board[emptyTiles[i]]; 
+      // set the current empty spot to the current player's piece
+      // remember, emptyTiles is an array of INDEX positions.  
+      // So whats happening here is the board is being set to the current player's piece
+      // for every empty tile on the board
+      board[emptyTiles[i]] = player.piece;
+
+      /*collect the score resulted from calling minimax 
+      on the opponent of the current player*/
+      if (player._AI == true)
+      { // if player is AI
+        // call minimax on playerOne.  score based on terminal result is stored
+        var result = game.minimax(board, playerOne);
+        // assign minimax score to score property of moveObj
+        moveObj.score = result.score;
+      }
+      else
+      { // otherwise, player is player 1 / not-AI
+        // call minimax on playerTwo.  store result
+        var result = game.minimax(board, playerTwo);
+        // assign score to score property of moveObj
+        moveObj.score = result.score;
+      }
+
+      // after collecting a score from minimax, reset the spot to empty
+      board[emptyTiles[i]] = moveObj.index;
+  
+      // push the moveObj object to the array of moveObj Objects
+      movesArray.push(moveObj);
+    }
+    
+    
+    // if it is the computer's turn loop over the moves and choose the move with the highest score
+    // Remember, a winning score for AI is -10.  
+    // It should choose the move with the highest score when AI is playing
+    var bestMove;
+    if(player._AI == true)
+    {
+      var bestScore = -10000;
+      for(var i = 0; i < movesArray.length; i++)
+      { //iterate through every possible moveObj in the movesArray
+        // IF a score of -10 is found, this represents a win for AI.  -10 is, of course, greater than -10000
+        if(movesArray[i].score > bestScore)
+        {
+          // bestScore is assigned any score greater than -10,000, initially
+          bestScore = movesArray[i].score;
+          // bestMove will represent the index position in movesArray where the best score was found
+          bestMove = i;
+        }
+      }
+    }
+    else
+    { // this branch handles the case where player is playerOne / not AI
+      // else loop over the moves and choose the move with the lowest score
+      // Remember, a winning score for the player is 10.
+      var bestScore = 10000;
+      for(var i = 0; i < movesArray.length; i++)
+      {
+        if(movesArray[i].score < bestScore)
+        { // 10, a winning score for this branch is less than 10,000, the initial bestScore
+          // if found, assign the score to bestScore
+          bestScore = movesArray[i].score;
+          // assign the index position where the new bestScore was found to bestMove variable
+          bestMove = i; 
+        }
+      }
+    }
+
+    // return the best possible move from the movesArray
+    return movesArray[bestMove];
+    
+  }, 
+  
+  emptyIndices: (board) => 
+  { // this is working
+    // console.log(board); --> outputs board array
+    var emptyIndexArray = [];
+    
+    board.forEach(function(tile, index) 
+    {
+      // if(tile == '') 
+      if($.isNumeric(tile))
+      { // return true if the tile is empty
+        // alert('empty found'); // working
+        emptyIndexArray.push(index);
+      }
+    });
+    console.log(emptyIndexArray);
+    return emptyIndexArray;
+  },
+  
+  checkWinAI: (board, player) => 
+  { 
+    var matchFound = function(solution) 
+    { 
+     var matchCount = 0;
+
+     for (var i = 0; i<solution.length; i++) 
+     { // for every tile in the solution (3 in total. i=[0,2]) ...
+        if(board[solution[i]] === player.piece)
+        { // if the value in the board data structure at i is the same as the current player's piece ....
+          // alert( 'currentBoard: ' + game.board.currentBoardData[solution[i]] + ', player piece: ' + currentPlayer.piece);
+          matchCount++;
+        }
+        else 
+        { // otherwise, if the value in the data structure at i is NOT equal to the player's piece ...
+          matchCount = 0;
+        }
+        if(matchCount == 3) 
+        {
+          // console.log("Solution found: " + solution);
+          // game.board.solutionAnimation(solution);
+          return true;
+        }
+      }
+    };
+    // The some() method checks if any of the elements in an array pass a test (provided as a callback).
+    // The callback will be executed once for each element until the callback returns true.
+    if(game.board.solutionSet.some(matchFound)) 
+    { // match was found ..
+      // alert('match found');
+      return true;
+    }// no match was found..
+    else {return false;}
+  },
+  
+  makeMoveAI: () => {
+    
+  }
+  
+  
+}// close game object
+
+// define getter/setter functions for game object properties
+
+Object.defineProperty(game, 'numberOfPlayers', {
+  get: function() {return this._numPlayers;},
+  set: function(num) {this._numPlayers = num;}
+});
+
+Object.defineProperty(game, 'numberOfTurns', {
+  get: function() {return this._numTurns;},
+  set: function(turns) {this._numTurns = turns;}
+});
+
+Object.defineProperty(game, 'whoMovesFirst', {
+  get: function() {return this._whoMovesFirst;},
+  set: function(player) {this._whoMovesFirst = player;}
+});
+
+Object.defineProperty(game, 'whoseTurn', {
+  get: function() {return this._whoseTurn;},
+  set: function(player) {this._whoseTurn = player;}
+});
+
+Object.defineProperty(game, 'tilesFilled', {
+  get: function() {return this._tilesFilled;},
+  set: function(num) {this._tilesFilled = num;}
+});
+
+Object.defineProperty(game, 'isGameOver', {
+  get: function() {return this._gameOver;},
+  set: function(bool) {this._gameOver = bool;}
+});
+
+Object.defineProperty(game, 'isFirstGame', {
+  get: function() {return this._firstGame;},
+  set: function(bool) {this._firstGame = bool;}
+});
+
+Object.defineProperty(game, 'currentPlayer', {
+  get: function() {return this._currentPlayer;},
+  set: function(playerObject) {this._currentPlayer = playerObject;}
+});
+
+Object.defineProperty(game, 'gameNotStarted' , {
+  get: function() {return this._gameNotStarted;},
+  set: function(bool) {this._gameNotStarted = bool;}
+});/////not using
+
+class Player {
+  constructor (identity)
+  {
+    // identity: which player is it? 1 or 2
+    this._identity = identity; 
+    // how many moves the player has made, or turns the player has played.
+    this._numMoves = 0;
+    // the number of times the player has won during this session
+    this._numWins = 0;
+    // which piece is the player using?  X or O.
+    this._piece = null;
+  }
+  // getters and setters for Player class properties
+
+  get identity(){return this._identity;}
+  set identity(playerNum) { this._identity = playerNum;}
+  
+  get numberOfTurns(){return this._numMoves;}
+  set numberOfTurns(num) { this._numMoves = num;}
+  
+  get numWins(){return this._numWins;}
+  set numWins(num) { this._numWins = num;}
+  
+  get piece(){return this._piece;}
+  set piece(letter) { this._piece = letter;}
 }
 
-function startGame() {
-	document.querySelector(".endgame").style.display = "none";
-	document.querySelector(".endgame .text").innerText = "";
-	document.querySelector(".selectSym").style.display = "block";
-	for (let i = 0; i < cells.length; i++) {
-		cells[i].innerText = "";
-		cells[i].style.removeProperty("background-color");
-	}
-}
+// let playerOne = new Player(1);
+// let playerTwo = new Player(2);
 
-function turnClick(square) {
-	if (typeof origBoard[square.target.id] === "number") {
-		turn(square.target.id, huPlayer);
-		if (!checkWin(origBoard, huPlayer) && !checkTie()) turn(bestSpot(), aiPlayer);
-	}
-}
+$(document).ready(function() 
+{ // .ready is called only after the DOM is fully constructed.
+  $('#piece-selection-form').toggleClass('hidden');
+  $('#game-over-form').toggleClass('hidden');
+  
+  $("#new-game-button").on('click', function(event) 
+  {
+    game.setupNewGame();
+  });
+  
+  $(".game-tile").on('click', function(event) 
+  {
+    // clickedBoardVal receives the 5th character of the clicked tile's ID.  0,1,2,...,9
+    var clickedBoardVal = game.board.currentBoardData[(event.target.id[4])];
+    
+    if(game.isGameOver) 
+    { // prevent further action if the game has ended or not yet restarted
+      return null;
+    }
 
-function turn(squareId, player) {
-	origBoard[squareId] = player;
-	document.getElementById(squareId).innerHTML = player;
-	let gameWon = checkWin(origBoard, player);
-	if (gameWon) gameOver(gameWon);
-	checkTie();
-}
+    if ( $.isNumeric(clickedBoardVal) )
+    { // if the current tile is "empty", or in this case, equal to an integer representing their
+      // index position, then add the game piece associated with the currentPlayer property of
+      // the game object
 
-function checkWin(board, player) {
-	let plays = board.reduce((a, e, i) => (e === player ? a.concat(i) : a), []);
-	let gameWon = null;
-	for (let [index, win] of winCombos.entries()) {
-		if (win.every((elem) => plays.indexOf(elem) > -1)) {
-			gameWon = { index: index, player: player };
-			break;
-		}
-	}
-	return gameWon;
-}
+      // alert(clickedBoardVal);
 
-function gameOver(gameWon) {
-	for (let index of winCombos[gameWon.index]) {
-		document.getElementById(index).style.backgroundColor =
-			gameWon.player === huPlayer ? "blue" : "red";
-	}
-	for (let i = 0; i < cells.length; i++) {
-		cells[i].removeEventListener("click", turnClick, false);
-	}
-	declareWinner(gameWon.player === huPlayer ? "You win!" : "You lose");
-}
+      // Adds the current player's piece to the empty game tile
+      $(this).children().text(game.currentPlayer.piece);
+      // Add the current player's piece to the board data structure.
+      game.board.currentBoardData[parseInt(event.target.id[4])] = game.currentPlayer.piece;
+      // increment the number of tiles that are filled
+      game.tilesFilled++;
+      
+      console.log(game);
+      console.log(playerOne);
+      console.log(playerTwo);
 
-function declareWinner(who) {
-	document.querySelector(".endgame").style.display = "block";
-	document.querySelector(".endgame .text").innerText = who;
-}
-function emptySquares() {
-	return origBoard.filter((elm, i) => i === elm);
-}
+      // check for  a tie
+      if(game.checkDraw())
+      { // if there is a tie..
+        // setTimeout(game.board.resetFlexBoxGrid, 1200);
+        setTimeout(game.board.setupNewGame, 1200);
+        // console.log(playerOne);
+        // console.log(playerTwo);
+        // console.log(game);
 
-function bestSpot() {
-	return minimax(origBoard, aiPlayer).index;
-}
+        // game.setupNewGame();
+        return null;
+      }
+    } 
+    else
+    { // runs if the clicked game tile is NOT empty!!!!
+      // alert('tile occupied');
+      return null;
+    }
+    // check whether the game has been won
+    
+    if(game.checkWin(game.board, game.currentPlayer))
+    { // 
+      game.isFirstGame = false;
+      if(playerTwo._AI)
+      {
+        $("#game-over-span").text("The computer wins!");
+      }
+      else {$("#game-over-span").text("Player " + game.currentPlayer.identity + " wins!");}
+      
+      $('.modal').fadeToggle(function() 
+      { // callback function
+        $('#Modal').modal('toggle');
+        // fade the span out
+        $('#first-move-span').fadeToggle();
+        // fade the button in
+        $("#new-game-button").fadeToggle();
+      });
+      return null;
+    }
+    else
+    {
+      game.nextTurn();  
+    }
+    // console.log(playerOne);
+    // console.log(playerTwo);
+    // console.log(game);
+  }); 
+  
+  $(".num-players-input").on('click', function(event) 
+  { // This is the first modal popup which controls the number of players..
+    if(!game.isFirstGame)
+    {
+      $('#first-move-span').toggleClass('hidden');
 
-function checkTie() {
-	if (emptySquares().length === 0) {
-		for (cell of cells) {
-			cell.style.backgroundColor = "green";
-			cell.removeEventListener("click", turnClick, false);
-		}
-		declareWinner("Tie game");
-		return true;
-	}
-	return false;
-}
+    }
+    
+    // the value of the radio button will either be 1 or 2.
+    game.numberOfPlayers = parseInt($(this).val())
+    // use pseudorandom generator to select who gets the first move.
+    game.whoMovesFirst = Math.random() >= 0.5 ? 1 : 2;
+    // whoseTurn property of game object is set to reflect whose turn it is.  (whoever moves first..)
+    game.whoseTurn = game.whoMovesFirst;
+    // assign currentPlayer property of game object to the appropriate Player object
+    
+    if(game.whoMovesFirst === 1) 
+    {
+      game.currentPlayer = playerOne;
+    }
+    else {
+      game.currentPlayer = playerTwo;
+    }
 
-function minimax(newBoard, player) {
-	var availSpots = emptySquares(newBoard);
+    if(game.numberOfPlayers == 1 && game.whoMovesFirst == 2) 
+    { // if 1 player game, indicate that player 2 will be A.I.
+      playerTwo._AI = true;
+     // Set up the dialog modal for a 1 player game where AI moves first
+      $("legend span").text("Player 1: ");
+      $("#first-move-span").text("Computer will make the first move");
+    }
+    else if(game.numberOfPlayers == 1 && game.whoMovesFirst == 1)
+    { // Set up the dialog modal for a 1 player game where the player moves first
+      playerTwo._AI = true;
 
-	if (checkWin(newBoard, huPlayer)) {
-		return { score: -10 };
-	} else if (checkWin(newBoard, aiPlayer)) {
-		return { score: 10 };
-	} else if (availSpots.length === 0) {
-		return { score: 0 };
-	}
+      $("legend span").text("Player " + game.whoMovesFirst +": ");
+      $("#first-move-span").text("Player " + game.whoMovesFirst +" will make the first move");
+    }
+    if(game.numberOfPlayers == 2) 
+    { // if 2 player game ....
+      $("legend span").text("Player " + game.whoMovesFirst +": ");
+      $("#first-move-span").text("Player " + game.whoMovesFirst +" will make the first move");
+    }
+    // $('#num-players-form').addClass('hidden')
+    
+    
+    $('#num-players-form').hide();
+    $('#piece-selection-form').toggleClass('hidden');
+    console.log(game);
+    console.log(playerOne);
+    console.log(playerTwo);
+    
+  });
+  
+  $('.piece-selection-input').on('click', function(event) 
+  {
+    if(game.numberOfPlayers == 1) 
+    { // If we have a 1 player game, the AI will never be allowed to pick its piece.
+      playerOne.piece = $(this).val();
+      
+      if(playerOne.piece == "X") 
+      { // if player one picks X, A.I is assigned O.
+        playerTwo.piece = "O";
+      } // else player 1 must have picked 0, in which case playerTwo is assigned X.
+      else {playerTwo.piece = "X";}
+    }
+    else if (game.numberOfPlayers == 2 && game.whoMovesFirst == 2) 
+    { // else if we have a 2 player game where player 2 moves first.
+      playerTwo.piece = $(this).val();
+      
+      if(playerTwo.piece == "X") 
+      {
+        playerOne.piece = "O";
+      }
+      else {playerOne.piece = "X";}
+    }
+    else 
+    { // Finally, if we have a 2 player game where player 1 moves first
+      playerOne.piece = $(this).val();
+      if(playerOne.piece == "X") 
+      {
+        playerTwo.piece = "O"
+      }
+      else {playerTwo.piece = "X";}
+    }
+        $('#piece-selection-form').toggleClass('hidden');
 
-	var moves = [];
-	for (let i = 0; i < availSpots.length; i++) {
-		var move = {};
-		move.index = newBoard[availSpots[i]];
-		newBoard[availSpots[i]] = player;
+    // $('#piece-selection-form').hide();    
+    $('.modal').fadeToggle(2500, function() 
+    { // callback function
+      $('#Modal').modal('toggle');
+      $('#first-move-span').fadeToggle();
+      $("#first-move-span").text("");
 
-		if (player === aiPlayer) move.score = minimax(newBoard, huPlayer).score;
-		else move.score = minimax(newBoard, aiPlayer).score;
-		newBoard[availSpots[i]] = move.index;
-		if (
-			(player === aiPlayer && move.score === 10) ||
-			(player === huPlayer && move.score === -10)
-		)
-			return move;
-		else moves.push(move);
-	}
-
-	let bestMove, bestScore;
-	if (player === aiPlayer) {
-		bestScore = -1000;
-		for (let i = 0; i < moves.length; i++) {
-			if (moves[i].score > bestScore) {
-				bestScore = moves[i].score;
-				bestMove = i;
-			}
-		}
-	} else {
-		bestScore = 1000;
-		for (let i = 0; i < moves.length; i++) {
-			if (moves[i].score < bestScore) {
-				bestScore = moves[i].score;
-				bestMove = i;
-			}
-		}
-	}
-
-	return moves[bestMove];
-}
-
-        </script>
-    </body>
+    });
+    
+    $("#new-game-button").fadeToggle(2500);
+    
+    // ADD CALL TO MINIMAX FOR PLAYER2'S FIRST MOVE, IF PLAYER 2 IS AI AND MOVES FIRST
+    if(playerTwo._AI && game.whoMovesFirst == 2)
+       { //AI seems to be correctly helping the AI player win..
+         var firstMove = Math.floor((Math.random() * 9));
+         while(firstMove == 4)
+         {
+           firstMove = Math.floor((Math.random() * 9));
+         }
+         
+         setTimeout(function(){ $('#tile'+firstMove).children().text(playerTwo.piece); }, 2500);
+         game.board.currentBoardData[firstMove] = playerTwo.piece;
+         game.tilesFilled++;
+         // var bestMove = game.minimax(game.board.currentBoardData, playerOne);
+         // game.board.currentBoardData[2] === playerTwo.piece;
+         // $('#tile2').text = playerTwo.piece;
+         game.nextTurn();
+       }
+    // log the objects after set up is finished..
+    console.log(playerOne);
+    console.log(playerTwo);
+    console.log(game);
+  });
+});
+	</script>
 </body>
 </html>
